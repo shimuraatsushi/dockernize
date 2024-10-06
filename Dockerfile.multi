@@ -157,29 +157,29 @@ COPY --from=builder /usr/local/curl /usr/local/curl
 COPY --from=builder /etc/php /etc/php
 
 WORKDIR /
-RUN apt update -y
-RUN apt install -y apache2
-RUN apachectl start
 
 RUN groupadd php-fpm && \
     useradd -m -s /bin/bash -g php-fpm php-fpm
+RUN apt update -y
 
 COPY config/php-fpm.conf /etc/php
 
 RUN mkdir -p /run/php
 RUN chown www-data:www-data /run/php
+RUN chown www-data:www-data /usr/local/php/var/log
 RUN chmod 770 /run/php
 
 RUN mkdir -p /usr/local/var/log/php-fpm
-RUN a2enmod proxy_fcgi setenvif
-RUN echo '<?php phpinfo(); ?>' > /var/www/html/info.php
+# RUN a2enmod proxy_fcgi setenvif
+# RUN echo '<?php phpinfo(); ?>' > /var/www/html/info.php
 
 ENV LD_LIBRARY_PATH="/usr/local/openssl/lib:/usr/local/icu/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-ENV OPENSSL_INCLUDE_DIR="/usr/local/openssl/include"
-ENV OPENSSL_LIB_DIR="/usr/local/openssl/lib"
 ENV PATH="$PATH:/usr/local/php/bin"
 
 RUN apt install -y \
     libreadline-dev \
     libxslt1-dev \
     libmcrypt4
+
+USER www-data
+# ENTRYPOINT ["/usr/local/php/sbin/php-fpm", "-D"]

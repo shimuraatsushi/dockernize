@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.multi
+    command: '/usr/local/php/sbin/php-fpm -F'
+    tty: true
+    stdin_open: true
+    volumes:
+      - php-fpm-sock:/run/php
+      - doc-root:/var/www/html
+  web:
+    image: httpd:2.4.62
+    ports:
+      - 8080:80
+    volumes:
+      - php-fpm-sock:/run/php
+      - doc-root:/var/www/html
+    depends_on:
+      - app
+volumes:
+  php-fpm-sock:
+  doc-root:
