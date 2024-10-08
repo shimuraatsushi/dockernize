@@ -179,7 +179,8 @@ ENV PATH="$PATH:/usr/local/php/bin"
 RUN apt install -y \
     libreadline-dev \
     libxslt1-dev \
-    libmcrypt4
+    libmcrypt4 \
+    libldap-2.5-0
 
 USER www-data
 # ENTRYPOINT ["/usr/local/php/sbin/php-fpm", "-D"]
