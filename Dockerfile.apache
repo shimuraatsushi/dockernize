@@ -1,0 +1,5 @@
+FROM httpd:2.4.62
+
+COPY config/apache2/httpd.conf /usr/local/apache2/conf
+
+ENTRYPOINT ["apachectl", "-DFOREGROUND"]
