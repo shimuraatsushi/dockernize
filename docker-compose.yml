@@ -10,7 +10,9 @@ services:
       - php-fpm-sock:/run/php
       - doc-root:/var/www/html
   web:
-    image: httpd:2.4.62
+    build:
+      context: .
+      dockerfile: Dockerfile.apache
     ports:
       - 8080:80
     volumes:
