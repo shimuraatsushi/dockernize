@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile.apache
     ports:
-      - 8080:80
+      - 443:443
     volumes:
       - php-fpm-sock:/run/php
       - doc-root:/var/www/html

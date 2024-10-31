@@ -1,5 +1,15 @@
 FROM httpd:2.4.62
 
+RUN apt update
+RUN apt install -y vim
+
 COPY config/apache2/httpd.conf /usr/local/apache2/conf
+
+WORKDIR /usr/local/apache2/conf
+RUN openssl genrsa 2048 > server.key
+RUN openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr -subj "/C=JP/ST=Tokyo/L=Nagoya-shi/O=ateam.inc/CN=localhost"
+RUN openssl x509 -in server.csr -days 365 -req -signkey server.key > server.crt
+RUN mv server.key server.key.org 
+RUN openssl rsa -in server.key.org > server.key
 
 ENTRYPOINT ["apachectl", "-DFOREGROUND"]
